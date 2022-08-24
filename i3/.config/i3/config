@@ -215,7 +215,6 @@ for_window [class="^.*"] border pixel 4
   bindsym $mod+Control+k exec --no-startup-id rofi -show Kill:$ROFISCRIPTS/kill.sh
 
 # screen brightness controls
-# sudo apt install light
 # sudo chmod +s /usr/bin/light
   bindsym XF86MonBrightnessUp exec light -A 10
   bindsym XF86MonBrightnessDown exec light -U 10
@@ -241,9 +240,9 @@ for_window [class="^.*"] border pixel 4
   exec --no-startup-id galculator
 
 # Scratchpads
-  for_window [class="whatsdesk"] move scratchpad; 
-  bindsym $mod+minus [class="whatsdesk"] scratchpad show; move position center
-  
+#  for_window [class="whatsdesk"] move scratchpad; 
+# bindsym $mod+minus [class="whatsdesk"] scratchpad show; move position center
+
   for_window [class="Galculator"] move scratchpad; 
   bindsym $mod+plus [class="Galculator"] scratchpad show; move position center
 
@@ -255,4 +254,3 @@ client.focused          $fbg $fbg $fbg $fbg
 client.focused_inactive $bg $bg $bg $bg
 client.unfocused        $bg $bg $bg $bg
 client.urgent           $bg $bg $bg $bg
-
