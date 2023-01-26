@@ -1,9 +1,6 @@
 # Modifiers
-  set $mod Mod1
+  set $mod Mod4
   floating_modifier $mod
-
-#Cancellare WS morto plasma+KDE
-for_window [title="Desktop — Plasma"] kill; floating enable; border none
 
 font pango:Victor Mono 14
 #exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
@@ -15,6 +12,15 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
+
+# Plasma task-bar to quickly execute and search
+
+  bindsym $mod+Shift+n exec --no-startup-id krunner
+
+# Plasma task-manager 
+
+  bindsym $mod+Shift+Delete exec --no-startup-id ksysguard
+
 # start a terminal
   bindsym $mod+Return exec --no-startup-id alacritty
 
@@ -22,7 +28,7 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
   bindsym $mod+Control+r exec --no-startup-id alacritty -e "ranger"
 
 # start a browser
-  bindsym $mod+b exec google-chrome-stable
+  bindsym $mod+b exec --no-startup-id brave
 
 # start thunar file manager
 	bindsym $mod+o exec thunar
@@ -191,7 +197,7 @@ mode "$mode_gaps" {
 #gaps outer 10
 
 for_window [class="^.*"] border pixel 4
-
+for_window [title="Desktop — Plasma"] kill; floating enable; border none
 # battery-mode.sh
 	bindsym $mod+Shift+w exec --no-startup-id ~/.dotfiles/bin/bin/battery-mode.sh
 
@@ -203,18 +209,19 @@ for_window [class="^.*"] border pixel 4
 
 # rofi
 
-	set $ROFISCRIPTS ~/.dotfiles/rofi/.config/rofi/scripts
+	set $ROFISCRIPTS ~/.config/rofi/scripts
   bindsym $mod+Control+q exec --no-startup-id $ROFISCRIPTS/powermenu.sh
-  bindsym $mod+d exec --no-startup-id
+  bindsym $mod+d exec --no-startup-id $ROFISCRIPTS/apps.sh
 	bindsym $mod+Shift+d exec --no-startup-id "rofi -show drun -run-command 'gksudo {cmd}'"
   bindsym $mod+Control+b exec --no-startup-id $ROFISCRIPTS/bluetooth.sh
   bindsym $mod+Control+w exec --no-startup-id $ROFISCRIPTS/wifi.sh
-  bindsym $mod+Control+s exec --no-startup-id $ROFISCRIPTS/scrot.sh
-  bindsym $mod+Control+p exec --no-startup-id $ROFISCRIPTS/monitor.sh
-  bindsym $mod+Control+t exec --no-startup-id rofi -show Themes:$ROFISCRIPTS/themeswitcher.sh
-  bindsym $mod+Control+k exec --no-startup-id rofi -show Kill:$ROFISCRIPTS/kill.sh
-
+  #bindsym $mod+Control+s exec --no-startup-id $ROFISCRIPTS/scrot.sh
+  #bindsym $mod+Control+p exec --no-startup-id $ROFISCRIPTS/monitor.sh
+  #bindsym $mod+Control+t exec --no-startup-id rofi -show Themes:$ROFISCRIPTS/themeswitcher.sh
+  #bindsym $mod+Control+k exec --no-startup-id rofi -show Kill:$ROFISCRIPTS/kill.sh
+  bindsym $mod+Control+k exec --no-startup-id ~/bin/layout-tastiera.sh
 # screen brightness controls
+# sudo apt install light
 # sudo chmod +s /usr/bin/light
   bindsym XF86MonBrightnessUp exec light -A 10
   bindsym XF86MonBrightnessDown exec light -U 10
@@ -231,26 +238,28 @@ for_window [class="^.*"] border pixel 4
   for_window [class="Thunar"] move container to workspace $ws3
 
 # autostart
-  exec_always --no-startup-id nm-applet
+exec_always --no-startup-id nitrogen --restore
+exec_always --no-startup-id tmux
+exec_always --no-startup-id dunst
+exec_always --no-startup-id nm-applet
   exec_always --no-startup-id blueman-applet
-  exec_always --no-startup-id sh ~/.dotfiles/polybar/.config/polybar/toggle.sh
+  exec_always --no-startup-id polybar
   exec_always --no-startup-id picom --config ~/.config/picom/picom.conf --experimental-backends -f
   exec_always --no-startup-id wal -R
   exec --no-startup-id libinput-gestures-setup start
-  exec --no-startup-id galculator
+ #exec --no-startup-id galculator
+
 
 # Scratchpads
 #  for_window [class="whatsdesk"] move scratchpad; 
-# bindsym $mod+minus [class="whatsdesk"] scratchpad show; move position center
+#  bindsym $mod+minus [class="whatsdesk"] scratchpad show; move position center
+  for_window [class="KCalc"] move scratchpad; 
+  bindsym $mod+plus [class="KCalc"] scratchpad show; move position center
 
-  for_window [class="Galculator"] move scratchpad; 
-  bindsym $mod+plus [class="Galculator"] scratchpad show; move position center
-
-set_from_resource $fg foreground
-set_from_resource $bg background
-set_from_resource $fbg color8
-
-client.focused          $fbg $fbg $fbg $fbg
-client.focused_inactive $bg $bg $bg $bg
-client.unfocused        $bg $bg $bg $bg
-client.urgent           $bg $bg $bg $bg
+#set_from_resource $fg foreground
+#set_from_resource $bg background
+#set_from_resource $fbg color8
+#client.focused          $fbg $fbg $fbg $fbg
+#client.focused_inactive $bg $bg $bg $bg
+#client.unfocused        $bg $bg $bg $bg
+#client.urgent           $bg $bg $bg $bg
