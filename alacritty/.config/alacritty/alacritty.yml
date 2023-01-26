@@ -1,6 +1,7 @@
 # Opacity
 
 window:
+  opacity: 0.9
   # Window class (Linux/BSD only):
   class:
     # Application instance name
