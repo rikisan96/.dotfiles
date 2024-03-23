@@ -122,3 +122,4 @@ function kill(){
   fi
 }
 
+export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
