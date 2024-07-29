@@ -2,7 +2,10 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-	export PATH=$HOME/bin:/usr/local/bin:$PATH
+	export PATH=$HOME/bin:/usr/local/bin:$PATH:~/.local/bin/
+
+export PATH="$PATH:/opt/mssql-tools/bin"
+export PATH="$PATH:/opt/mssql-tools/bin"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -15,6 +18,25 @@ ZSH_THEME="robbyrussell"
 # a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+# zsh parameter completion for the dotnet CLI
+
+#autocompletion TAB per dotnet CLI
+_dotnet_zsh_complete()
+{
+  local completions=("$(dotnet complete "$words")")
+
+  # If the completion list is empty, just continue with filename selection
+  if [ -z "$completions" ]
+  then
+    _arguments '*::arguments: _normal'
+    return
+  fi
+
+  # This is not a variable assignment, don't remove spaces!
+  _values = "${(ps:\n:)completions}"
+}
+
+compdef _dotnet_zsh_complete dotnet
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -74,6 +96,7 @@ plugins=(
 	git
 	zsh-autosuggestions
 	zsh-syntax-highlighting
+	fzf
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -87,7 +110,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
+  export EDITOR='nvim'
 # else
 #   export EDITOR='mvim'
 # fi
@@ -103,23 +126,21 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-
-function install(){
-	pacman -Slq | fzf -m -q "$1" -m --preview "pacman -Si {1}" | xargs -ro sudo pacman -S 
-}
-
-function uninstall() {
-	pacman -Qq | fzf -q "$1" -m --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns 
-}
-alias ptop="bpytop"
-function kill(){
-  local pid
-  pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
-
-  if [ "x$pid" != "x" ]
-  then
-    echo $pid | xargs kill -${1:-9}
-  fi
-}
+#
+alias zj="zellij"
 
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+    
+#default port for dotnet webserver
+export ASPNETCORE_URLS=http://localhost:5001/
+
+
+function ff() {
+  IFS=$'\n' files=($(fd --hidden . -t f | fzf -m --prompt 'edit file > ' --reverse --preview "${BAT_PREVIEW_OPTS} {}"))
+  [[ -n "$files" ]] && ${EDITOR:-nvim} "${files[@]}"
+}
+
+PATH=~/.console-ninja/.bin:$PATH
+
+# Load Angular CLI autocompletion.
+source <(ng completion script)
