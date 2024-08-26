@@ -38,6 +38,9 @@ _dotnet_zsh_complete()
 
 compdef _dotnet_zsh_complete dotnet
 
+#path per Entity Framework e tools
+export PATH="$PATH:/home/riscaldino/.dotnet/tools"
+
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
