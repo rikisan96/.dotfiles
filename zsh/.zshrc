@@ -137,6 +137,11 @@ export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 #default port for dotnet webserver
 export ASPNETCORE_URLS=http://localhost:5001/
 
+#scriptino babbo per zj ls perche' dimentico i nomi delle sessioni LEL
+function zja() { 
+  selection=($(zellij ls | sed -e 's/\x1B\[[0-9;]*m//g' | fzf | awk '{print $1}'))
+  zellij a ${selection}
+}
 
 function ff() {
   IFS=$'\n' files=($(fd --hidden . -t f | fzf -m --prompt 'edit file > ' --reverse --preview "${BAT_PREVIEW_OPTS} {}"))
